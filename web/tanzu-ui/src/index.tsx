@@ -8,12 +8,15 @@ import '@cds/core/styles/theme.dark.min.css';
 import './index.scss';
 
 import App from './App';
+import { AppProvider } from './store';
 
 ReactDOM.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <AppProvider>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </AppProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

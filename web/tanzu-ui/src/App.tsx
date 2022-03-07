@@ -1,11 +1,26 @@
 // React imports
-import * as React from "react";
+import React, {createContext, useContext} from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
 // App imports
 import HeaderComponent from "./shared/components/header/header.component";
 import { CdsDivider } from "@cds/react/divider";
-import { CdsButton } from "@cds/react/button";
+import { CdsNavigation, CdsNavigationItem, CdsNavigationStart } from "@cds/react/navigation";
+import { CdsIcon } from "@cds/react/icon";
+import LandingPage from "./components/LandingPage";
+import Docker from "./components/Docker";
+import styled from "styled-components";
+import { Store } from "./store";
+
+const Container = styled.div`
+    position: relative;
+    min-height: 400px;
+`;
+const MainBody = styled.div`
+    position: absolute;
+    inset: 0;
+    display: flex;
+`;
 
 function App() {
     // Note: this is for testing/setup of dark mode; sets body theme to dark
@@ -13,65 +28,47 @@ function App() {
     document.body.setAttribute("cds-theme", "dark");
     document.body.setAttribute("class", "dark");
 
+    const {state} = useContext(Store);
+
     return (
         <main cds-layout="vertical align:stretch" cds-text="body">
-            <HeaderComponent/>
-            <section cds-layout="horizontal align:vertical-stretch wrap:none">
-                <nav cds-text="demo-sidenav" cds-layout="p:md p@md:lg">sidebar
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="about" element={<About />} />
-                    </Routes>
-                </nav>
-                <CdsDivider cds-text="demo-divider" orientation="vertical"></CdsDivider>
-                <div cds-layout="vertical align:stretch">
-                    <div cds-text="demo-content demo-scrollable-content">
-                        <div cds-layout="vertical gap:md p:lg">
-                            <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="about" element={<About />} />
-                            </Routes>
-                        </div>
+            {/* <HeaderComponent/> */}
+            <MainBody>
+                <CdsNavigation expanded={state.ui.navExpanded} onExpandedChange={(e:any) =>{ const t=e.target;t.expanded=!t.expanded}}>
+                    <CdsNavigationStart>Root Start</CdsNavigationStart>
+                    <CdsNavigationItem>
+                        <CdsIcon shape="home" size="sm"></CdsIcon>
+                        <a href="#">
+                            Home
+                        </a>
+                    </CdsNavigationItem>
+                    <CdsNavigationItem>
+                        <a href="#">
+                        <CdsIcon shape="help-info" size="sm"></CdsIcon>
+                        Help
+                        </a>
+                    </CdsNavigationItem>
+                    <CdsNavigationItem>
+                        <a href="#">
+                        <CdsIcon shape="file" size="sm"></CdsIcon>
+                        Documentation
+                        </a>
+                    </CdsNavigationItem>
+                </CdsNavigation>
+                <section cds-layout="grid gap:md">
+                    <div cds-layout="col:4">
+                        <img src={"/welcome.png"}/>
                     </div>
-                </div>
-            </section>
-
-            {/* Testing CDS Core buttons. TODO: wire up some events */}
-            <section cds-layout="horizontal gap:sm">
-                <CdsButton status="primary">primary</CdsButton>
-                <CdsButton status="success">success</CdsButton>
-                <CdsButton status="danger">danger</CdsButton>
-                <CdsButton status="danger" disabled>
-                    disabled
-                </CdsButton>
-            </section>
+                    <div cds-layout="col:8">
+                        <Routes>
+                            <Route path="/" element={<LandingPage />}></Route>
+                            <Route path="/docker" element={<Docker />}></Route>
+                        </Routes>
+                    </div>
+                </section>
+            </MainBody>
+            
         </main>
-    );
-}
-
-function Home() {
-    return (
-        <>
-            <h2>Welcome to the Home page</h2>
-            <p>Home page content</p>
-            <nav>
-                <Link to="/about">About</Link>
-            </nav>
-        </>
-    );
-}
-
-function About() {
-    return (
-        <>
-            <h2>Who are we?</h2>
-            <p>
-                We are Tanzu
-            </p>
-            <nav>
-                <Link to="/">Home</Link>
-            </nav>
-        </>
     );
 }
 
