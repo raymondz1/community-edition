@@ -13,7 +13,8 @@ interface StatusProps {
 }
 
 interface TabProps {
-    disabled?: boolean
+    disabled?: boolean,
+    size: number
 }
 
 export interface ChildProps extends StepWizardChildProps {
@@ -25,12 +26,13 @@ const Tab = styled.button<TabProps>`
     position: relative;
     padding: 20px;
     min-width: 200px;
+    width: ${props => (100/props.size) + '%'};
     border: none;
     border-right: 1px solid #0f181c;
     border-bottom: 1px solid #0f181c;
     display: inline-block;
     background-color: #1c2b32;
-    margin-bottom: 30px;
+    text-align: left;
     font-size: 12px;
     font-family: 'Metropolis';
     color: white;
@@ -66,17 +68,14 @@ const TabNumber = styled.span`
     line-height: 36px;
 `;
 
-
-const TAB_NAMES = ['AWS Credentials', 'Cluster settings', 'Regions and resources', 'Configuration', 'Go!'];
-
 function StepNav(props: ChildProps | any) {
-    const { totalSteps, goToStep, currentStep, tabStatus } = props;
+    const { totalSteps, goToStep, currentStep, tabStatus,  tabNames, numberOfChildren } = props;
     const hasInvalidStep = tabStatus.indexOf(STATUS.INVALID) !== -1;
     return (
         <div>
             {
                 _.times(totalSteps, (index) => {
-                    return <Tab key={index} onClick={() => {
+                    return <Tab key={index} size={numberOfChildren} onClick={() => {
                         if (!hasInvalidStep) {
                             goToStep(index + 1);
                         }
@@ -86,7 +85,7 @@ function StepNav(props: ChildProps | any) {
                             tabStatus[index] === STATUS.INVALID ? 
                                 STATUS.INVALID : (index + 1 === currentStep ? 
                                     STATUS.CURRENT : tabStatus[index])}/>
-                        <TabNumber>{ index+1 }</TabNumber> {TAB_NAMES[index]}
+                        <TabNumber>{ index+1 }</TabNumber> {tabNames[index]}
                     </Tab>;
                 })
             }

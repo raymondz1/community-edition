@@ -14,6 +14,7 @@ import { Store } from './state-management/stores/Store';
 import { NavRoutes } from './shared/constants/NavRoutes.constants';
 import ManagementClusterLanding from './views/management-cluster/ManagementClusterLanding';
 import WorkloadClusterLanding from './views/workload-cluster/WorkloadClusterLanding';
+import AwsManagementCluster from './views/management-cluster/AwsManagementCluster';
 
 function App() {
     const { dispatch } = useContext(Store);
@@ -49,6 +50,7 @@ function App() {
                                 <Route path={NavRoutes.MANAGEMENT_CLUSTER_LANDING} element={<ManagementClusterLanding />}></Route>
                                 <Route path={NavRoutes.WORKLOAD_CLUSTER_LANDING} element={<WorkloadClusterLanding />}></Route>
                                 <Route path={NavRoutes.VSPHERE} element={<VSphere />}></Route>
+                                <Route path={NavRoutes.AWS} element={<AwsManagementCluster />} />
                                 <Route path={NavRoutes.DEPLOY_PROGRESS} element={<DeployProgress />}></Route>
                             </Routes>
                         </div>
