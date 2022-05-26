@@ -11,6 +11,8 @@ import { CriService } from '../../../../../swagger-api';
 import { StepProps } from '../../../../../shared/components/wizard/Wizard';
 import './McPrerequisiteStep.scss';
 import { STATUS } from '../../../../../shared/constants/App.constants';
+import HeaderBar from '../../../../../shared/components/HeaderBar/HeaderBar';
+import { BrowserRouter, Router } from 'react-router-dom';
 
 function McPrerequisiteStep(props: Partial<StepProps>) {
     const { currentStep, goToStep, setTabStatus, tabStatus } = props;
@@ -19,7 +21,7 @@ function McPrerequisiteStep(props: Partial<StepProps>) {
     const connect = async () => {
         try {
             await CriService.getContainerRuntimeInfo();
-            setConnection(true);
+            setConnection(false);
         } catch (err: any) {
             setErrorMessage(err.body.message);
             setConnection(false);
@@ -47,7 +49,7 @@ function McPrerequisiteStep(props: Partial<StepProps>) {
             <p cds-layout="m-y:lg" className="description">
                 Management cluster with the Docker daemon requires minimum allocated 4 CPUs and total memory of 6GB.
             </p>
-            {connected && (
+            {/* {connected && (
                 <CdsAlertGroup
                     status="success"
                     aria-label="Management cluster with the Docker daemon requires minimum allocated 4 CPUs and total memory of 6GB."
@@ -59,13 +61,16 @@ function McPrerequisiteStep(props: Partial<StepProps>) {
                 <CdsAlertGroup status="danger">
                     <CdsAlert cds-i18n='{ "closeButtonAriaLabel": "close dark theme success alert"}'>{errorMessage}</CdsAlert>
                 </CdsAlertGroup>
-            )}
+            )} */}
             <div cds-layout="p-y:lg">
                 <CdsButton onClick={connect} disabled={connected}>
                     <CdsIcon shape="connect" size="md"></CdsIcon>
                     CONNECT DOCKER DAEMON
                 </CdsButton>
             </div>
+            <BrowserRouter basename="/ui">
+                <HeaderBar></HeaderBar>
+            </BrowserRouter>
             <CdsButton onClick={handleNext}>NEXT</CdsButton>
         </div>
     );
